@@ -1,4 +1,1 @@
-# build/*
-# bin/*
-# .vscode
-# cache
+.vscode

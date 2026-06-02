@@ -5,15 +5,12 @@ import (
 	"fmt"
 	"log/slog"
 	"net/http"
-	"os"
-	"os/signal"
-	"syscall"
 	"time"
 
-	"github.com/RayTheCrack/Go-WebServer/internal/config"
-	"github.com/RayTheCrack/Go-WebServer/internal/db"
-	"github.com/RayTheCrack/Go-WebServer/internal/handler"
-	"github.com/RayTheCrack/Go-WebServer/internal/middleware"
+	"go-webserver/internal/config"
+	"go-webserver/internal/db"
+	"go-webserver/internal/handler"
+	"go-webserver/internal/middleware"
 )
 
 // Server holds all dependencies and the HTTP server.
@@ -105,10 +102,8 @@ func (s *Server) Run() error {
 		close(errCh)
 	}()
 
-	// Wait for interrupt signal (SIGINT/SIGTERM), matching C++ SIGINT handler
-	quit := make(chan os.Signal, 1)
-	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
-	sig := <-quit
+	// Wait for shutdown signal (platform-specific)
+	sig := waitForShutdownSignal()
 	slog.Info("shutdown signal received", "signal", sig)
 
 	// Graceful shutdown with timeout

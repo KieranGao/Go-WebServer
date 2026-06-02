@@ -5,9 +5,9 @@ import (
 	"log"
 	"log/slog"
 
-	"github.com/RayTheCrack/Go-WebServer/internal/config"
-	xlog "github.com/RayTheCrack/Go-WebServer/internal/log"
-	"github.com/RayTheCrack/Go-WebServer/internal/server"
+	"go-webserver/internal/config"
+	xlog "go-webserver/internal/log"
+	"go-webserver/internal/server"
 )
 
 func main() {

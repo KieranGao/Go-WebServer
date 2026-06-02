@@ -2,11 +2,10 @@ package handler
 
 import (
 	"encoding/json"
+	"go-webserver/internal/db"
 	"log/slog"
 	"net/http"
 	"strings"
-
-	"github.com/RayTheCrack/Go-WebServer/internal/db"
 )
 
 // Auth returns handlers for login and register endpoints.
