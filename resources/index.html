@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OxyTheCrack - 首页</title>
+    <link rel="icon" href="images/favicon.ico">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- 自定义样式 -->
+    <style>
+        :root {
+            --primary-black: #0a0a0a;
+            --dark-black: #000000;
+            --accent-red: #dc3545;
+            --light-red: #e74c3c;
+            --deep-red: #c0392b;
+            --text-white: #ffffff;
+            --text-gray: #c7bdbd;
+            --glass-bg: rgba(0, 0, 0, 0.7);
+            --border-red: rgba(220, 53, 69, 0.3);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Montserrat', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, var(--dark-black) 0%, var(--primary-black) 50%, #1a1a1a 100%);
+            color: var(--text-white);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* 背景动画效果 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(220, 53, 69, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(231, 76, 60, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(192, 57, 43, 0.08) 0%, transparent 50%);
+            z-index: -1;
+            animation: pulse 8s infinite alternate;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+        
+        /* 导航栏样式 */
+        .navbar.custom-navbar {
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid var(--border-red);
+            padding: 15px 0;
+            transition: all 0.3s ease;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 2rem;
+            color: var(--text-white) !important;
+            text-shadow: 0 0 15px var(--accent-red);
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-brand:hover {
+            color: var(--accent-red) !important;
+            transform: scale(1.05);
+        }
+        
+        .nav li a {
+            color: var(--text-white) !important;
+            font-weight: 600;
+            padding: 15px 20px !important;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--accent-red);
+            transition: width 0.3s ease;
+        }
+        
+        .nav li a:hover::after {
+            width: 100%;
+        }
+        
+        .nav li a:hover {
+            color: var(--accent-red) !important;
+            background: rgba(220, 53, 69, 0.1);
+        }
+        
+        /* 英雄区域 */
+        .hero-section {
+            padding: 180px 0 100px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .hero-title {
+            font-size: 4.5rem;
+            font-weight: 900;
+            margin-bottom: 25px;
+            text-shadow: 0 0 30px var(--accent-red);
+            background: linear-gradient(45deg, var(--text-white), var(--accent-red), var(--light-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 3px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 20px var(--accent-red), 0 0 30px var(--light-red); }
+            to { text-shadow: 0 0 30px var(--accent-red), 0 0 40px var(--light-red), 0 0 50px var(--deep-red); }
+        }
+        
+        .hero-subtitle {
+            font-size: 1.8rem;
+            margin-bottom: 50px;
+            opacity: 0.9;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+        
+        .hero-buttons {
+            margin-top: 40px;
+        }
+        
+        .btn-hero {
+            background: linear-gradient(45deg, var(--accent-red), var(--light-red));
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            border-radius: 50px;
+            transition: all 0.4s ease;
+            margin: 0 15px;
+            letter-spacing: 1px;
+            box-shadow: 0 10px 25px rgba(220, 53, 69, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-hero:hover::before {
+            left: 100%;
+        }
+        
+        .btn-hero:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(220, 53, 69, 0.6);
+        }
+        
+        /* 特色卡片 */
+        .features-section {
+            padding: 100px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 70px;
+            color: var(--text-white);
+            text-shadow: 0 0 20px var(--accent-red);
+        }
+        
+        .feature-card {
+            background: var(--glass-bg);
+            border-radius: 20px;
+            padding: 40px 30px;
+            margin: 20px 0;
+            backdrop-filter: blur(20px);
+            border: 2px solid var(--border-red);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--accent-red), var(--light-red));
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-15px);
+            border-color: var(--accent-red);
+            box-shadow: 0 20px 50px rgba(220, 53, 69, 0.3);
+        }
+        
+        .feature-icon {
+            font-size: 4rem;
+            margin-bottom: 25px;
+            color: var(--accent-red);
+            text-shadow: 0 0 15px var(--accent-red);
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover .feature-icon {
+            transform: scale(1.2) rotate(10deg);
+        }
+        
+        .feature-card h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-white);
+        }
+        
+        .feature-card p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-gray);
+            font-weight: 300;
+        }
+        
+        /* 关于我们区域 */
+        .about-section {
+            padding: 100px 0;
+            background: rgba(0, 0, 0, 0.3);
+            margin: 50px 0;
+            border-radius: 30px;
+        }
+        
+        .about-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .about-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 30px;
+            color: var(--accent-red);
+        }
+        
+        .about-text {
+            font-size: 1.2rem;
+            line-height: 2;
+            color: var(--text-gray);
+            margin-bottom: 30px;
+        }
+        
+        /* 统计数据 */
+        .stats-section {
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .stat-item {
+            display: inline-block;
+            margin: 0 30px;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--accent-red);
+            text-shadow: 0 0 20px var(--accent-red);
+        }
+        
+        .stat-label {
+            font-size: 1.2rem;
+            color: var(--text-gray);
+            margin-top: 10px;
+        }
+        
+        /* 页脚 */
+        footer {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            padding: 50px 0 30px;
+            border-top: 2px solid var(--border-red);
+            margin-top: 100px;
+        }
+        
+        .footer-content {
+            text-align: center;
+        }
+        
+        .footer-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--accent-red);
+        }
+        
+        .footer-links {
+            margin: 30px 0;
+        }
+        
+        .footer-links a {
+            color: var(--text-gray);
+            margin: 0 15px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent-red);
+        }
+        
+        .copyright {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-red);
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.8rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.3rem;
+            }
+            
+            .btn-hero {
+                display: block;
+                margin: 10px auto;
+                width: 80%;
+            }
+            
+            .feature-card {
+                margin: 15px 0;
+                padding: 30px 20px;
+            }
+        }
+    </style>
+    <!-- Font Awesome CDN for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body data-spy="scroll" data-target=".navbar-collapse" data-offset="50">
+    <!-- 导航栏 -->
+    <div class="navbar custom-navbar navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon icon-bar"></span>
+                    <span class="icon icon-bar"></span>
+                    <span class="icon icon-bar"></span>
+                </button>
+                <a href="/" class="navbar-brand">OXY<span style="color: var(--accent-red);">THE</span>CRACK WEB<span style="color: var(--accent-red);">SERVER</span></a>
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a class="smoothScroll" href="#home">首页</a></li>
+                    <li><a class="smoothScroll" href="#features">特色</a></li>
+                    <li><a class="smoothScroll" href="#about">关于</a></li>
+                    <li><a class="smoothScroll" href="/picture">图片</a></li>
+                    <li><a class="smoothScroll" href="/video">视频</a></li>
+                    <li><a class="smoothScroll" href="/login">登录</a></li>
+                    <li><a class="smoothScroll" href="/register">注册</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主要内容区域 -->
+    <div class="container">
+        <!-- 英雄区域 -->
+        <section id="home" class="hero-section">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="hero-title animated fadeInDown">OXYTHERACK WEBSERVER</h1>
+                    <p class="hero-subtitle animated fadeInUp">专业级Web服务器平台</p>
+                    
+                    <div class="hero-buttons animated fadeInUp delay-1s">
+                        <a href="/register" class="btn btn-hero">
+                            <i class="fa fa-user-plus"></i> 立即注册
+                        </a>
+                        <a href="/login" class="btn btn-hero">
+                            <i class="fa fa-sign-in"></i> 用户登录
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 特色功能 -->
+        <section id="features" class="features-section">
+            <h2 class="section-title">核心特色</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="feature-card animated fadeInUp">
+                        <div class="feature-icon">
+                            <i class="fa fa-shield"></i>
+                        </div>
+                        <h3>军工级安全防护(TODO)</h3>
+                        <p>采用多层防御体系，集成SSL/TLS加密、SQL注入防护、XSS攻击拦截等先进技术，确保数据传输和存储的绝对安全。</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card animated fadeInUp delay-1s">
+                        <div class="feature-icon">
+                            <i class="fa fa-bolt"></i>
+                        </div>
+                        <h3>高性能并发处理</h3>
+                        <p>基于epoll的异步IO模型，支持百万级并发连接，配备智能线程池和连接池，实现毫秒级响应速度。</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card animated fadeInUp delay-2s">
+                        <div class="feature-icon">
+                            <i class="fa fa-database"></i>
+                        </div>
+                        <h3>高可用数据库集群</h3>
+                        <p>MySQL数据库连接池管理，提供高可用性和负载均衡，保障业务连续性。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="feature-card animated fadeInUp delay-3s">
+                        <div class="feature-icon">
+                            <i class="fa fa-clock-o"></i>
+                        </div>
+                        <h3>智能定时任务调度</h3>
+                        <p>自研最小堆定时器系统，精确到毫秒级别，支持动态添加删除定时任务，优化资源利用效率。</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card animated fadeInUp delay-4s">
+                        <div class="feature-icon">
+                            <i class="fa fa-code"></i>
+                        </div>
+                        <h3>现代化HTTP协议支持</h3>
+                        <p>完整支持HTTP/1.1协议规范，具备请求解析、状态保持、错误处理等完整功能模块。</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card animated fadeInUp delay-5s">
+                        <div class="feature-icon">
+                            <i class="fa fa-server"></i>
+                        </div>
+                        <h3>企业级架构设计</h3>
+                        <p>模块化组件设计，松耦合高内聚，支持热部署和动态配置，便于维护和扩展。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 关于我们 -->
+        <section id="about" class="about-section">
+            <div class="about-content">
+                <h2 class="about-title">关于 OxyTheCrack Webserver</h2>
+                <p class="about-text">
+                    OxyTheCrack Webserver是一款面向企业级应用的高性能Web服务器解决方案，专为现代互联网应用而设计。
+                    我们致力于提供最安全、最稳定、最高性能的网络服务基础设施，帮助企业构建可靠的在线业务平台。
+                </p>
+                <p class="about-text">
+                    基于C++20标准开发，采用现代化编程技术和设计模式，通过严格的性能测试和安全审计，
+                    确保在各种复杂网络环境下都能稳定运行，为企业数字化转型提供强有力的技术支撑。
+                </p>
+            </div>
+        </section>
+
+        <!-- 统计数据 -->
+        <section class="stats-section">
+            <div class="stat-item">
+                <div class="stat-number counter" data-count="99.9">0</div>
+                <div class="stat-label">系统可用性 %</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number counter" data-count="100000">0</div>
+                <div class="stat-label">并发连接数</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number counter" data-count="50">0</div>
+                <div class="stat-label">响应时间 ms</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number counter" data-count="24">0</div>
+                <div class="stat-label">小时技术支持</div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <h3 class="footer-title">OXYTHECRACK</h3>
+                <p>打造最安全、最高效的Web服务器解决方案</p>
+                
+                <div class="footer-links">
+                    <a href="#"><i class="fa fa-home"></i> 首页</a>
+                    <a href="#"><i class="fa fa-info-circle"></i> 关于我们</a>
+                    <a href="#"><i class="fa fa-envelope"></i> 联系我们</a>
+                    <a href="#"><i class="fa fa-question-circle"></i> 技术支持</a>
+                </div>
+                
+                <div class="copyright">
+                    <p>&copy; 2026 @OxyTheCrack. All rights reserved. | 高性能Web服务器平台</p>
+                    <p>Powered by Advanced C++ Technology</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 脚本 -->
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/smoothscroll.js"></script>
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="js/magnific-popup-options.js"></script>
+    <script src="js/wow.min.js"></script>
+    <script src="js/custom.js"></script>
+    
+    <script>
+        // 初始化动画
+        new WOW().init();
+        
+        // 平滑滚动
+        $('.smoothScroll').click(function(e) {
+            e.preventDefault();
+            var target = $(this).attr('href');
+            if(target.startsWith('#')) {
+                $('html, body').animate({
+                    scrollTop: $(target).offset().top - 80
+                }, 1000);
+            } else {
+                window.location.href = target;
+            }
+        });
+        
+        // 数字动画计数器
+        $('.counter').each(function() {
+            var $this = $(this);
+            var countTo = $this.attr('data-count');
+            
+            $({ countNum: 0 }).animate({
+                countNum: countTo
+            }, {
+                duration: 3000,
+                easing: 'linear',
+                step: function() {
+                    $this.text(Math.floor(this.countNum));
+                },
+                complete: function() {
+                    $this.text(this.countNum);
+                }
+            });
+        });
+        
+        // 导航栏滚动效果
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 100) {
+                $('.navbar').addClass('scrolled');
+            } else {
+                $('.navbar').removeClass('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>

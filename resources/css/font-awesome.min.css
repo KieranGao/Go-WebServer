@@ -1,0 +1,25 @@
+/* Font Awesome 5.15.4 - Icons and Fonts */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/v4-shims.min.css');
+
+/* 本地备用字体定义 */
+@font-face {
+  font-family: 'FontAwesome';
+  src: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/webfonts/fa-solid-900.woff2') format('woff2'),
+       url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/webfonts/fa-solid-900.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.fa, .fas, .far, .fal, .fab {
+  display: inline-block;
+  font-family: 'FontAwesome', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Magnific Popup v1.1.0 - CSS */
+.mfp-bg{top:0;left:0;overflow:hidden;position:fixed;z-index:1040;opacity:.8;background:#000}.mfp-wrap{top:0;left:0;width:100%;height:100%;z-index:1050;position:fixed;outline:0!important;-webkit-backface-visibility:hidden}.mfp-container{text-align:center;position:absolute;width:100%;height:100%;left:0;top:0;padding:0;margin:0;z-index:1050}.mfp-content{line-height:0;padding:0;outline:0}.mfp-iframe-holder .mfp-content{width:100%;height:100%}.mfp-iframe-holder iframe{line-height:0;border:0}.mfp-close{right:0;top:0;width:44px;height:44px;line-height:44px;position:absolute;text-align:center;text-decoration:none;color:#f3f3f3;font-style:normal;z-index:3050;padding:0;border:0;-webkit-box-shadow:none;box-shadow:none;cursor:pointer;background:rgba(0,0,0,.42)}.mfp-close:hover{background:rgba(0,0,0,.64)}.mfp-close:focus{outline:0}.mfp-wrap.mfp-auto-cursor .mfp-content{cursor:auto}

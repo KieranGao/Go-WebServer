@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OxyTheCrack - 错误页面</title>
+    <link rel="icon" href="images/favicon.ico">
+    <!-- 引入Bootstrap CDN（避免本地文件依赖） -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 自定义样式 - 黑红主题核心 -->
+    <style>
+        /* 全局变量 - 黑红主题 */
+        :root {
+            --primary-red: #c91b1b;       /* 主红色 */
+            --dark-red: #8b0000;          /* 暗红/酒红 */
+            --light-red: #ff4545;         /* 亮红（强调） */
+            --black: #0a0a0a;             /* 主黑色 */
+            --dark-gray: #1a1a1a;         /* 深灰（背景） */
+            --mid-gray: #2d2d2d;          /* 中灰（容器） */
+            --light-gray: #444444;        /* 浅灰（边框） */
+            --text-white: #f5f5f5;        /* 白色文字 */
+            --text-gray: #cccccc;         /* 灰色文字 */
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.5); /* 阴影 */
+        }
+        
+        /* 全局重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, var(--black) 0%, var(--dark-gray) 100%);
+            color: var(--text-white);
+            min-height: 100vh;
+            padding-top: 80px; /* 给导航栏留空间 */
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* 导航栏样式 */
+        .custom-navbar {
+            background: rgba(10, 10, 10, 0.95) !important;
+            border-bottom: 1px solid var(--primary-red);
+            backdrop-filter: blur(8px);
+            box-shadow: var(--shadow);
+        }
+        
+        .navbar-brand {
+            color: var(--primary-red) !important;
+            font-weight: 700;
+            font-size: 1.4rem;
+            letter-spacing: 1px;
+        }
+        
+        .navbar-nav > li > a {
+            color: var(--text-white) !important;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .navbar-nav > li > a:hover {
+            color: var(--light-red) !important;
+            border-bottom: 2px solid var(--primary-red);
+        }
+        
+        /* 错误容器核心样式 */
+        .error-container {
+            background: var(--mid-gray);
+            border-radius: 20px;
+            padding: 60px 40px;
+            width: 100%;
+            max-width: 700px;
+            margin: 50px auto;
+            border: 1px solid var(--light-gray);
+            box-shadow: var(--shadow);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* 背景装饰 */
+        .error-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, var(--primary-red) 0%, transparent 70%);
+            opacity: 0.2;
+            border-radius: 50%;
+        }
+        
+        /* 错误图标 */
+        .error-icon {
+            font-size: 6rem;
+            color: var(--primary-red);
+            margin-bottom: 25px;
+            animation: pulse-red 2s infinite ease-in-out;
+            filter: drop-shadow(0 0 15px rgba(201, 27, 27, 0.4));
+        }
+        
+        @keyframes pulse-red {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        /* 标题样式 */
+        .error-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, var(--primary-red), var(--light-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+        }
+        
+        /* 错误信息 */
+        .error-message {
+            font-size: 1.2rem;
+            color: var(--text-gray);
+            margin-bottom: 35px;
+            line-height: 1.6;
+        }
+        
+        /* 错误详情面板 */
+        .error-details {
+            background: rgba(139, 0, 0, 0.15);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            border: 1px solid var(--primary-red);
+            text-align: left;
+        }
+        
+        .error-code {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--light-red);
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--light-gray);
+            padding-bottom: 10px;
+        }
+        
+        .solution-list {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+        
+        .solution-list li {
+            margin: 10px 0;
+            padding: 5px 0;
+            color: var(--text-gray);
+            transition: all 0.2s ease;
+        }
+        
+        .solution-list li:hover {
+            color: var(--text-white);
+            transform: translateX(5px);
+        }
+        
+        .solution-list li i {
+            color: var(--primary-red);
+            margin-right: 8px;
+        }
+        
+        /* 联系方式面板 */
+        .contact-methods {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .contact-item {
+            background: var(--dark-gray);
+            border-radius: 10px;
+            padding: 12px 25px;
+            border: 1px solid var(--light-gray);
+            transition: all 0.3s ease;
+            color: var(--text-white);
+            cursor: pointer;
+        }
+        
+        .contact-item:hover {
+            background: var(--primary-red);
+            color: var(--text-white);
+            transform: translateY(-5px);
+            border-color: var(--primary-red);
+            box-shadow: 0 5px 15px rgba(201, 27, 27, 0.3);
+        }
+        
+        .contact-item i {
+            margin-right: 8px;
+        }
+        
+        /* 按钮样式 */
+        .btn-action {
+            background: linear-gradient(90deg, var(--primary-red), var(--dark-red));
+            border: none;
+            padding: 14px 35px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            margin: 10px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: white !important;
+            box-shadow: 0 4px 15px rgba(201, 27, 27, 0.2);
+            text-decoration: none;
+        }
+        
+        .btn-action:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(201, 27, 27, 0.4);
+            color: white !important;
+            text-decoration: none;
+        }
+        
+        .btn-secondary {
+            background: var(--dark-gray);
+            color: var(--text-white) !important;
+            border: 1px solid var(--light-gray);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--light-gray);
+            border-color: var(--primary-red);
+            color: var(--text-white) !important;
+        }
+        
+        /* 支持信息 */
+        .support-info {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--light-gray);
+            font-size: 0.9rem;
+            color: var(--text-gray);
+        }
+        
+        /* 响应式适配 */
+        @media (max-width: 768px) {
+            .error-container {
+                padding: 40px 20px;
+                margin: 30px auto;
+            }
+            
+            .error-title {
+                font-size: 2rem;
+            }
+            
+            .error-icon {
+                font-size: 4rem;
+            }
+            
+            .contact-methods {
+                gap: 10px;
+            }
+            
+            .contact-item {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .btn-action {
+                padding: 12px 25px;
+                font-size: 1rem;
+                margin: 8px 5px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar custom-navbar navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="/" class="navbar-brand">OxyTheCrack</a>
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 错误容器 -->
+    <div class="container">
+        <div class="error-container">
+            <div class="error-header">
+                <div class="error-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h1 class="error-title">操作失败</h1>
+                <p class="error-message">抱歉，您的请求遇到了一些问题，请检查后重试</p>
+            </div>
+            
+            <div class="error-details">
+                <div class="error-code">错误代码: 404 NOT FOUND</div>
+                <p style="color: var(--text-gray); margin-bottom: 10px;">可能的原因：</p>
+                <ul class="solution-list">
+                    <li><i class="fas fa-times-circle"></i> 用户名或密码不正确</li>
+                    <li><i class="fas fa-times-circle"></i> 用户名已被注册</li>
+                    <li><i class="fas fa-times-circle"></i> 输入格式不符合要求</li>
+                    <li><i class="fas fa-times-circle"></i> 网络连接异常</li>
+                </ul>
+            </div>
+            
+            <div class="contact-methods">
+                <div class="contact-item">
+                    <i class="fas fa-home"></i> 返回首页
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-question-circle"></i> 帮助中心
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i> 联系客服
+                </div>
+            </div>
+            
+            <div class="error-actions">
+                <a href="/" class="btn btn-action">
+                    <i class="fas fa-home"></i> 返回首页
+                </a>
+                <a href="/login" class="btn btn-action btn-secondary">
+                    <i class="fas fa-sign-in"></i> 重新登录
+                </a>
+                <a href="/register" class="btn btn-action btn-secondary">
+                    <i class="fas fa-user-plus"></i> 用户注册
+                </a>
+            </div>
+            
+            <div class="support-info">
+                <p>如果您持续遇到问题，请联系我们的技术支持团队</p>
+                <p>邮箱: support@oxythecrack.com | 电话: 400-xxx-xxxx</p>
+                <p style="margin-top: 15px;">© 2026 OxyTheCrack - 我们始终在这里为您提供帮助</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 脚本（引入CDN，避免本地依赖） -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
+    <script>
+        // 平滑滚动（替代smoothscroll.js）
+        document.querySelectorAll('.smoothScroll').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // 错误页面自动刷新提示
+        setTimeout(function() {
+            const errorMsg = document.querySelector('.error-message');
+            errorMsg.innerHTML += '<br><small style="font-size: 0.8em; color: var(--text-gray);">页面将在10秒后自动刷新...</small>';
+        }, 3000);
+        
+        // 10秒后自动刷新页面
+        setTimeout(function() {
+            location.reload();
+        }, 10000);
+        
+        // 联系方式点击事件
+        document.querySelectorAll('.contact-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const text = this.textContent.trim().replace(/\s+/g, '').replace(/[^\u4e00-\u9fa5]/g, '');
+                if (text === '返回首页') window.location.href = '/';
+                if (text === '帮助中心') alert('帮助中心功能暂未上线');
+                if (text === '联系客服') alert('客服邮箱：Gazy0906@Outlook.com');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OxyTheCrack - 用户注册</title>
+    <link rel="icon" href="images/favicon.ico">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- 自定义样式 -->
+    <style>
+        :root {
+            --primary-black: #0a0a0a;
+            --dark-black: #000000;
+            --accent-red: #dc3545;
+            --light-red: #e74c3c;
+            --deep-red: #c0392b;
+            --text-white: #ffffff;
+            --text-gray: #bdc3c7;
+            --glass-bg: rgba(0, 0, 0, 0.85);
+            --border-red: rgba(220, 53, 69, 0.4);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Montserrat', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, var(--dark-black) 0%, var(--primary-black) 50%, #1a1a1a 100%);
+            color: var(--text-white);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            display: flex;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        /* 背景动画效果 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(220, 53, 69, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(231, 76, 60, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 40% 10%, rgba(192, 57, 43, 0.15) 0%, transparent 50%);
+            z-index: -1;
+            animation: particles 12s infinite linear;
+        }
+        
+        @keyframes particles {
+            0% { transform: translate(0, 0) rotate(0deg); opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { transform: translate(50px, -50px) rotate(360deg); opacity: 0.6; }
+        }
+        
+        /* 导航栏样式 */
+        .navbar.custom-navbar {
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid var(--border-red);
+            padding: 15px 0;
+            transition: all 0.3s ease;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.7);
+        }
+        
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.8rem;
+            color: var(--text-white) !important;
+            text-shadow: 0 0 15px var(--accent-red);
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-brand:hover {
+            color: var(--accent-red) !important;
+            transform: scale(1.05);
+        }
+        
+        .nav li a {
+            color: var(--text-white) !important;
+            font-weight: 600;
+            padding: 15px 20px !important;
+            transition: all 0.3s ease;
+        }
+        
+        .nav li a:hover {
+            color: var(--accent-red) !important;
+            background: rgba(220, 53, 69, 0.1);
+        }
+        
+        /* 注册容器 */
+        .register-wrapper {
+            width: 100%;
+            max-width: 550px;
+            margin: 80px auto 0;
+        }
+        
+        .register-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            border-radius: 25px;
+            padding: 50px 40px;
+            border: 2px solid var(--border-red);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            position: relative;
+            overflow: hidden;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        .register-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--accent-red), var(--light-red), var(--deep-red));
+        }
+        
+        /* 注册头部 */
+        .register-header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .register-logo {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            color: var(--accent-red);
+            text-shadow: 0 0 20px var(--accent-red);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .register-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, var(--text-white), var(--accent-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+        }
+        
+        .register-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-gray);
+            font-weight: 300;
+        }
+        
+        /* 表单样式 */
+        .form-group {
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .input-group {
+            position: relative;
+        }
+        
+        .input-group-addon {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 50px;
+            background: linear-gradient(45deg, var(--accent-red), var(--light-red));
+            border: none;
+            border-radius: 12px 0 0 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            z-index: 2;
+        }
+        
+        .form-control {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--border-red);
+            border-radius: 12px;
+            padding: 18px 20px 18px 60px;
+            color: var(--text-white);
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            height: 60px;
+        }
+        
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--accent-red);
+            box-shadow: 0 0 20px rgba(220, 53, 69, 0.5);
+            color: var(--text-white);
+            outline: none;
+        }
+        
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        /* 密码强度指示器 */
+        .password-strength {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin-top: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .strength-meter {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s ease;
+            border-radius: 3px;
+        }
+        
+        .strength-weak {
+            background: linear-gradient(90deg, #ff4757, #ff6b6b);
+            width: 33%;
+        }
+        
+        .strength-medium {
+            background: linear-gradient(90deg, #ffa502, #ffb142);
+            width: 66%;
+        }
+        
+        .strength-strong {
+            background: linear-gradient(90deg, #2ed573, #26d0ce);
+            width: 100%;
+        }
+        
+        .strength-text {
+            font-size: 0.8rem;
+            margin-top: 8px;
+            text-align: right;
+            color: var(--text-gray);
+            transition: color 0.3s ease;
+        }
+        
+        .strength-weak-text { color: #ff6b6b; }
+        .strength-medium-text { color: #ffb142; }
+        .strength-strong-text { color: #2ed573; }
+        
+        /* 注册按钮 */
+        .btn-register {
+            background: linear-gradient(45deg, var(--accent-red), var(--light-red));
+            border: none;
+            padding: 18px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 12px;
+            width: 100%;
+            transition: all 0.4s ease;
+            letter-spacing: 2px;
+            box-shadow: 0 10px 25px rgba(220, 53, 69, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-register::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-register:hover::before {
+            left: 100%;
+        }
+        
+        .btn-register:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(220, 53, 69, 0.6);
+        }
+        
+        .btn-register:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .btn-register:disabled:hover {
+            transform: none;
+            box-shadow: none;
+        }
+        
+        /* 注册底部 */
+        .register-footer {
+            text-align: center;
+            margin-top: 35px;
+            padding-top: 25px;
+            border-top: 1px solid var(--border-red);
+        }
+        
+        .register-footer p {
+            margin: 10px 0;
+            color: var(--text-gray);
+        }
+        
+        .register-footer a {
+            color: var(--accent-red);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .register-footer a:hover {
+            color: var(--light-red);
+            text-decoration: underline;
+        }
+        
+        .terms {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            margin-top: 20px;
+            text-align: center;
+            line-height: 1.6;
+        }
+        
+        .terms a {
+            color: var(--accent-red);
+            text-decoration: none;
+        }
+        
+        .terms a:hover {
+            text-decoration: underline;
+        }
+        
+        /* 加载动画 */
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--accent-red);
+            animation: spin 1s ease-in-out infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .register-container {
+                padding: 40px 30px;
+                margin: 60px 20px 0;
+            }
+            
+            .register-title {
+                font-size: 1.8rem;
+            }
+            
+            .register-logo {
+                font-size: 2.5rem;
+            }
+            
+            .form-control {
+                padding: 15px 15px 15px 50px;
+                height: 50px;
+            }
+            
+            .input-group-addon {
+                width: 45px;
+                font-size: 1rem;
+            }
+        }
+        
+        /* 错误提示样式 */
+        .error-message {
+            color: #ff6b6b;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .form-control.error {
+            border-color: #ff6b6b;
+            box-shadow: 0 0 15px rgba(255, 107, 107, 0.5);
+        }
+        
+        /* 成功提示样式 */
+        .success-message {
+            color: #2ed573;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .form-control.success {
+            border-color: #2ed573;
+            box-shadow: 0 0 15px rgba(46, 213, 115, 0.5);
+        }
+    </style>
+    <!-- Font Awesome CDN for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+    <!-- 导航栏 -->
+    <div class="navbar custom-navbar navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon icon-bar"></span>
+                    <span class="icon icon-bar"></span>
+                    <span class="icon icon-bar"></span>
+                </button>
+                <a href="/" class="navbar-brand">OXY<span style="color: var(--accent-red);">THE</span>CRACK</a>
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a class="smoothScroll" href="/">首页</a></li>
+                    <li><a class="smoothScroll" href="/picture">图片</a></li>
+                    <li><a class="smoothScroll" href="/video">视频</a></li>
+                    <li><a class="smoothScroll" href="/login">登录</a></li>
+                    <li><a class="smoothScroll" href="/register">注册</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 注册容器 -->
+    <div class="register-wrapper">
+        <div class="register-container animated fadeInUp">
+            <div class="register-header">
+                <div class="register-logo">
+                    <i class="fa fa-user-plus"></i>
+                </div>
+                <h1 class="register-title">用户注册</h1>
+                <p class="register-subtitle">加入 OxyTheCrack 安全网络大家庭</p>
+            </div>
+            
+            <form id="registerForm" action="/register" method="post">
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="fa fa-user"></i>
+                        </span>
+                        <input type="text" name="username" id="username" class="form-control" placeholder="用户名（3-20个字符）" required minlength="3" maxlength="20">
+                    </div>
+                    <div class="error-message" id="usernameError">用户名必须为3-20个字符，只能包含字母、数字和下划线</div>
+                    <div class="success-message" id="usernameSuccess">用户名可用</div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="fa fa-key"></i>
+                        </span>
+                        <input type="password" name="password" id="password" class="form-control" placeholder="设置密码（至少6位）" required minlength="6">
+                    </div>
+                    <div class="password-strength">
+                        <div class="strength-meter" id="strengthMeter"></div>
+                    </div>
+                    <div class="strength-text" id="strengthText">密码强度：请输入密码</div>
+                    <div class="error-message" id="passwordError">密码至少需要6个字符</div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="fa fa-check"></i>
+                        </span>
+                        <input type="password" id="confirmPassword" class="form-control" placeholder="确认密码" required>
+                    </div>
+                    <div class="error-message" id="confirmPasswordError">两次输入的密码不一致</div>
+                    <div class="success-message" id="confirmPasswordSuccess">密码确认正确</div>
+                </div>
+                
+                <button type="submit" class="btn btn-register" id="registerBtn" disabled>
+                    <i class="fa fa-user-plus"></i> 创建安全账户
+                </button>
+                
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p style="margin-top: 15px; color: var(--text-gray);">正在创建您的账户...</p>
+                </div>
+                
+                <div class="terms">
+                    注册即表示您同意我们的<a href="#">服务条款</a>和<a href="#">隐私政策</a>。
+                    我们承诺保护您的个人信息安全，绝不会泄露给第三方。
+                </div>
+            </form>
+            
+            <div class="register-footer">
+                <p>已有账户？ <a href="/login">立即登录</a></p>
+                <p style="margin-top: 15px; font-size: 0.9rem;">
+                    需要帮助？联系 <a href="mailto:support@oxythecrack.com">客服支持</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 脚本 -->
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/smoothscroll.js"></script>
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="js/magnific-popup-options.js"></script>
+    <script src="js/wow.min.js"></script>
+    <script src="js/custom.js"></script>
+    
+    <script>
+        new WOW().init();
+        
+        // 全局变量
+        let formValid = {
+            username: false,
+            password: false,
+            confirmPassword: false
+        };
+        
+        // 更新注册按钮状态
+        function updateRegisterButton() {
+            const allValid = Object.values(formValid).every(valid => valid);
+            const registerBtn = document.getElementById('registerBtn');
+            
+            if (allValid) {
+                registerBtn.disabled = false;
+                registerBtn.innerHTML = '<i class="fa fa-user-plus"></i> 创建安全账户';
+            } else {
+                registerBtn.disabled = true;
+                registerBtn.innerHTML = '<i class="fa fa-lock"></i> 请完善信息';
+            }
+        }
+        
+        // 用户名验证
+        document.getElementById('username').addEventListener('input', function() {
+            const username = this.value.trim();
+            const errorEl = document.getElementById('usernameError');
+            const successEl = document.getElementById('usernameSuccess');
+            
+            // 隐藏所有提示
+            errorEl.style.display = 'none';
+            successEl.style.display = 'none';
+            this.classList.remove('error', 'success');
+            
+            // 基本验证
+            if (username.length === 0) {
+                formValid.username = false;
+                updateRegisterButton();
+                return;
+            }
+            
+            if (username.length < 3 || username.length > 20) {
+                errorEl.textContent = '用户名长度必须在3-20个字符之间';
+                errorEl.style.display = 'block';
+                this.classList.add('error');
+                formValid.username = false;
+            } else if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+                errorEl.textContent = '用户名只能包含字母、数字和下划线';
+                errorEl.style.display = 'block';
+                this.classList.add('error');
+                formValid.username = false;
+            } else {
+                // 模拟检查用户名是否已存在
+                successEl.style.display = 'block';
+                this.classList.add('success');
+                formValid.username = true;
+            }
+            
+            updateRegisterButton();
+        });
+        
+        // 密码强度检测
+        document.getElementById('password').addEventListener('input', function() {
+            const password = this.value;
+            const strengthMeter = document.getElementById('strengthMeter');
+            const strengthText = document.getElementById('strengthText');
+            const errorEl = document.getElementById('passwordError');
+            
+            // 隐藏错误信息
+            errorEl.style.display = 'none';
+            this.classList.remove('error');
+            
+            if (password.length === 0) {
+                strengthMeter.className = 'strength-meter';
+                strengthText.textContent = '密码强度：请输入密码';
+                strengthText.className = 'strength-text';
+                formValid.password = false;
+                updateRegisterButton();
+                return;
+            }
+            
+            // 密码强度计算
+            let strength = 0;
+            let strengthLabel = '';
+            let strengthClass = '';
+            
+            if (password.length >= 6) strength++;
+            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+            if (/\d/.test(password)) strength++;
+            if (/[^a-zA-Z0-9]/.test(password)) strength++;
+            
+            // 设置强度显示
+            strengthMeter.className = 'strength-meter';
+            if (strength <= 1) {
+                strengthMeter.classList.add('strength-weak');
+                strengthLabel = '弱';
+                strengthClass = 'strength-weak-text';
+            } else if (strength <= 2) {
+                strengthMeter.classList.add('strength-medium');
+                strengthLabel = '中等';
+                strengthClass = 'strength-medium-text';
+            } else {
+                strengthMeter.classList.add('strength-strong');
+                strengthLabel = '强';
+                strengthClass = 'strength-strong-text';
+            }
+            
+            strengthText.textContent = `密码强度：${strengthLabel}`;
+            strengthText.className = `strength-text ${strengthClass}`;
+            
+            // 验证密码长度
+            if (password.length < 6) {
+                errorEl.style.display = 'block';
+                this.classList.add('error');
+                formValid.password = false;
+            } else {
+                formValid.password = true;
+            }
+            
+            updateRegisterButton();
+            
+            // 触发确认密码验证
+            if (document.getElementById('confirmPassword').value) {
+                document.getElementById('confirmPassword').dispatchEvent(new Event('input'));
+            }
+        });
+        
+        // 密码确认验证
+        document.getElementById('confirmPassword').addEventListener('input', function() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = this.value;
+            const errorEl = document.getElementById('confirmPasswordError');
+            const successEl = document.getElementById('confirmPasswordSuccess');
+            
+            // 隐藏所有提示
+            errorEl.style.display = 'none';
+            successEl.style.display = 'none';
+            this.classList.remove('error', 'success');
+            
+            if (confirmPassword.length === 0) {
+                formValid.confirmPassword = false;
+                updateRegisterButton();
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                errorEl.style.display = 'block';
+                this.classList.add('error');
+                formValid.confirmPassword = false;
+            } else {
+                successEl.style.display = 'block';
+                this.classList.add('success');
+                formValid.confirmPassword = true;
+            }
+            
+            updateRegisterButton();
+        });
+        
+        // 表单提交处理
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // 最终验证
+            if (Object.values(formValid).every(valid => valid)) {
+                // 显示加载动画
+                document.getElementById('registerBtn').style.display = 'none';
+                document.getElementById('loading').style.display = 'block';
+                
+                // 模拟注册过程
+                setTimeout(() => {
+                    // 这里应该发送实际的注册请求
+                    // 为了演示，我们直接提交表单
+                    this.submit();
+                }, 2500);
+            }
+        });
+        
+        // 添加输入框焦点效果
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.parentElement.style.transform = 'scale(1.02)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.parentElement.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>

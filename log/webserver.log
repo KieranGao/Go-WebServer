@@ -1,0 +1,11 @@
+2026-06-02 22:25:33.058 [WARN] database unavailable, running without auth error=ping database: Error 1049 (42000): Unknown database 'webserver'
+2026-06-02 22:25:33.058 [INFO] HTTP server listening addr=:9999
+2026-06-02 22:25:33.805 [INFO] request method=GET path=/health status=200 duration_ms=0 remote=127.0.0.1:36570
+2026-06-02 22:25:33.810 [INFO] request method=GET path=/index.html status=200 duration_ms=0 remote=127.0.0.1:36572
+2026-06-02 22:25:33.815 [INFO] request method=GET path=/login.html status=200 duration_ms=0 remote=127.0.0.1:36588
+2026-06-02 22:25:33.821 [INFO] request method=GET path=/register.html status=200 duration_ms=0 remote=127.0.0.1:36602
+2026-06-02 22:25:33.829 [INFO] request method=GET path=/css/bootstrap.min.css status=200 duration_ms=0 remote=127.0.0.1:36604
+2026-06-02 22:25:33.834 [INFO] request method=GET path=/images/favicon.ico status=200 duration_ms=0 remote=127.0.0.1:36606
+2026-06-02 22:25:33.838 [INFO] request method=GET path=/nonexistent status=404 duration_ms=0 remote=127.0.0.1:36620
+2026-06-02 22:25:33.840 [INFO] shutdown signal received signal=terminated
+2026-06-02 22:25:33.840 [INFO] server stopped gracefully
