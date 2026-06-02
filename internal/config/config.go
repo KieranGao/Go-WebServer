@@ -8,43 +8,34 @@ import (
 	"strings"
 )
 
-// Config holds all runtime configuration, mirroring the C++ Config singleton.
 type Config struct {
-	// Network
-	Port             int
-	OptLinger        bool
-	TriggerMode      int // 1-4: LT/ET combinations
-	ThreadNum        int
-	MaxBodySize      int // bytes
-	ConnectionTimeout int // seconds
+	// 网络配置
+	Port              int // 服务监听端口
+	ConnectionTimeout int // 连接超时时间，单位：秒
 
-	// Logging
-	LogFile          string
-	LogLevel         int // 0=DEBUG, 1=INFO, 2=WARN, 3=ERROR
-	LogQueueSize     int
-	LogFlushInterval int // seconds
-	OpenLog          bool
+	// 日志配置
+	LogFile          string // 日志文件路径
+	LogLevel         int    // 日志级别：0=DEBUG, 1=INFO, 2=WARN, 3=ERROR
+	LogQueueSize     int    // 日志队列大小
+	LogFlushInterval int    // 日志刷新间隔，单位：秒
+	OpenLog          bool   // 是否开启日志
 
-	// Database
-	ConnPoolSize   int
-	DBHost         string
-	DBPort         int
-	DBUser         string
-	DBPassword     string
-	DBName         string
+	// 数据库配置
+	ConnPoolSize int    // 数据库连接池大小
+	DBHost       string // 数据库地址
+	DBPort       int    // 数据库端口
+	DBUser       string // 数据库用户名
+	DBPassword   string // 数据库密码
+	DBName       string // 数据库名称
 
-	// Resources
-	ResourceRoot string
+	// 资源文件
+	ResourceRoot string // 静态资源根目录
 }
 
-// DefaultConfig returns a Config with sensible defaults matching config.conf.
+// 默认配置
 func DefaultConfig() *Config {
 	return &Config{
 		Port:              9999,
-		OptLinger:         false,
-		TriggerMode:       4,
-		ThreadNum:         64,
-		MaxBodySize:       1 << 20, // 1MB
 		ConnectionTimeout: 60,
 		LogFile:           "log/webserver",
 		LogLevel:          1,
@@ -71,6 +62,7 @@ func LoadFile(path string) (*Config, error) {
 	}
 	defer f.Close()
 
+	// 逐行读取
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
@@ -87,14 +79,6 @@ func LoadFile(path string) (*Config, error) {
 		switch key {
 		case "port":
 			cfg.Port, _ = strconv.Atoi(val)
-		case "opt_linger":
-			cfg.OptLinger = val == "true"
-		case "trigger_mode":
-			cfg.TriggerMode, _ = strconv.Atoi(val)
-		case "thread_num":
-			cfg.ThreadNum, _ = strconv.Atoi(val)
-		case "max_body_size":
-			cfg.MaxBodySize, _ = strconv.Atoi(val)
 		case "connection_timeout":
 			cfg.ConnectionTimeout, _ = strconv.Atoi(val)
 		case "log_file":
@@ -125,6 +109,8 @@ func LoadFile(path string) (*Config, error) {
 	}
 
 	if err := scanner.Err(); err != nil {
+		// 包装error使用%w可以通过上游解包
+		// 自定义的error用%s即可
 		return nil, fmt.Errorf("read config file: %w", err)
 	}
 	return cfg, nil

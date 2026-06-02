@@ -1,2 +1,15 @@
 .vscode
 .claude
+
+# Build artifacts
+webserver
+webserver.exe
+server
+*.exe
+
+# Logs
+*.log
+log/
+
+# Docker
+mysql_data/

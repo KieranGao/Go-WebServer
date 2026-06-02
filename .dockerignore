@@ -1,0 +1,12 @@
+.git
+.gitignore
+*.exe
+cmd/bench
+*.log
+log/
+*.md
+LICENSE
+docker-compose.yml
+Dockerfile
+Dockerfile.local
+.dockerignore
