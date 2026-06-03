@@ -18,7 +18,6 @@ type Config struct {
 	LogLevel         int    // 日志级别：0=DEBUG, 1=INFO, 2=WARN, 3=ERROR
 	LogQueueSize     int    // 日志队列大小
 	LogFlushInterval int    // 日志刷新间隔，单位：秒
-	OpenLog          bool   // 是否开启日志
 
 	// 数据库配置
 	ConnPoolSize int    // 数据库连接池大小
@@ -41,7 +40,6 @@ func DefaultConfig() *Config {
 		LogLevel:          1,
 		LogQueueSize:      1024,
 		LogFlushInterval:  3,
-		OpenLog:           true,
 		ConnPoolSize:      16,
 		DBHost:            "127.0.0.1",
 		DBPort:            3306,
@@ -52,7 +50,7 @@ func DefaultConfig() *Config {
 	}
 }
 
-// LoadFile parses a config.conf file (key = value format, # comments).
+// LoadFile 解析配置文件（key = value 格式，# 为注释）
 func LoadFile(path string) (*Config, error) {
 	cfg := DefaultConfig()
 
@@ -89,8 +87,6 @@ func LoadFile(path string) (*Config, error) {
 			cfg.LogQueueSize, _ = strconv.Atoi(val)
 		case "log_flush_interval":
 			cfg.LogFlushInterval, _ = strconv.Atoi(val)
-		case "open_log":
-			cfg.OpenLog = val == "true"
 		case "connection_pool_size":
 			cfg.ConnPoolSize, _ = strconv.Atoi(val)
 		case "db_host":

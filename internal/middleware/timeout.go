@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-// Timeout wraps requests with a context deadline.
+// Timeout 为请求设置 context 超时截止时间
 func Timeout(d time.Duration) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

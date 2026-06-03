@@ -29,24 +29,17 @@ func main() {
 		cfg.Port = *port
 	}
 
-	// 初始化logger
-	var shutdownLogger func()
-	if cfg.OpenLog { // 日志开启
-		logger, shutdown, err := xlog.New(
-			cfg.LogFile,
-			xlog.Level(cfg.LogLevel),
-			cfg.LogQueueSize,
-			cfg.LogFlushInterval,
-		)
-		if err != nil {
-			log.Fatalf("init logger: %v", err)
-		}
-		slog.SetDefault(logger)
-		shutdownLogger = shutdown
-	} else { // 否则输出到控制台
-		slog.SetDefault(xlog.StdoutLogger(xlog.Level(cfg.LogLevel)))
-		shutdownLogger = func() {}
+	// 初始化日志系统
+	logger, shutdownLogger, err := xlog.New(
+		cfg.LogFile,
+		xlog.Level(cfg.LogLevel),
+		cfg.LogQueueSize,
+		cfg.LogFlushInterval,
+	)
+	if err != nil {
+		log.Fatalf("init logger: %v", err)
 	}
+	slog.SetDefault(logger)
 	defer shutdownLogger()
 
 	srv, err := server.New(cfg)

@@ -1,0 +1,2 @@
+2026-06-03 20:36:54.031 [INFO] database connected host=127.0.0.1 port=3306 db=webserver pool_size=16
+2026-06-03 20:36:54.031 [INFO] HTTP server listening addr=:9999

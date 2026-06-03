@@ -6,7 +6,7 @@ import (
 	"runtime/debug"
 )
 
-// Recovery catches panics and returns 500 instead of crashing the server.
+// Recovery 捕获 panic，返回 500 而不是让服务器崩溃
 func Recovery(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		defer func() {

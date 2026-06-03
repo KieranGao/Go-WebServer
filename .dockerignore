@@ -8,5 +8,4 @@ log/
 LICENSE
 docker-compose.yml
 Dockerfile
-Dockerfile.local
 .dockerignore

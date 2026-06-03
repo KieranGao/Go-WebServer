@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-// responseWriter wraps http.ResponseWriter to capture the status code.
+// responseWriter 包装 http.ResponseWriter，用于捕获状态码
 type responseWriter struct {
 	http.ResponseWriter
 	status int
@@ -17,7 +17,7 @@ func (rw *responseWriter) WriteHeader(code int) {
 	rw.ResponseWriter.WriteHeader(code)
 }
 
-// Log logs each HTTP request with method, path, status, and duration.
+// Log 记录每个 HTTP 请求的方法、路径、状态码和耗时
 func Log(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()

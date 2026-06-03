@@ -8,14 +8,15 @@ import (
 	"strings"
 )
 
-// Auth returns handlers for login and register endpoints.
+// Auth 处理登录、注册接口的处理器
 type Auth struct {
 	DB *db.DB
 }
 
-// Login handles POST /login — verifies username/password.
+// Login 处理 POST /login 登录请求
 func (a *Auth) Login() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		// 只允许POST请求
 		if r.Method != http.MethodPost {
 			http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 			return
@@ -25,7 +26,7 @@ func (a *Auth) Login() http.HandlerFunc {
 		if !ok {
 			return
 		}
-
+		// 解析用户名和密码
 		result, err := a.DB.Login(username, password)
 		if err != nil {
 			slog.Error("login failed", "user", username, "error", err)
@@ -47,7 +48,7 @@ func (a *Auth) Login() http.HandlerFunc {
 	}
 }
 
-// Register handles POST /register — creates a new user.
+// Register 处理 POST /register 注册请求
 func (a *Auth) Register() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
@@ -67,11 +68,14 @@ func (a *Auth) Register() http.HandlerFunc {
 		}
 
 		slog.Info("register success", "user", username)
+		// 302临时重定向为登陆页面
 		http.Redirect(w, r, "/login.html", http.StatusFound)
 	}
 }
 
-// parseCredentials extracts username/password from form or JSON body.
+// parseCredentials 统一解析用户名和密码
+// 支持：application/json 或 form 表单格式
+
 func (a *Auth) parseCredentials(w http.ResponseWriter, r *http.Request) (username, password string, ok bool) {
 	ct := r.Header.Get("Content-Type")
 
@@ -87,7 +91,7 @@ func (a *Auth) parseCredentials(w http.ResponseWriter, r *http.Request) (usernam
 		return body.Username, body.Password, true
 	}
 
-	// Default: application/x-www-form-urlencoded
+	// 默认：表单格式 form-urlencoded
 	if err := r.ParseForm(); err != nil {
 		a.respondError(w, r, http.StatusBadRequest, "Invalid form data")
 		return "", "", false
@@ -95,7 +99,7 @@ func (a *Auth) parseCredentials(w http.ResponseWriter, r *http.Request) (usernam
 	return r.FormValue("username"), r.FormValue("password"), true
 }
 
-// respondError sends an error page matching the C++ error HTML behavior.
+// respondError 统一错误响应：返回错误页面
 func (a *Auth) respondError(w http.ResponseWriter, r *http.Request, code int, msg string) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.WriteHeader(code)

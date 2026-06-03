@@ -1,15 +1,10 @@
 .vscode
 .claude
 
-# Build artifacts
-webserver
-webserver.exe
-server
-*.exe
-
 # Logs
-*.log
-log/
+# *.log
+# log
+*.md
 
 # Docker
 mysql_data/

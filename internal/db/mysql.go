@@ -45,10 +45,10 @@ func Open(cfg Config) (*DB, error) {
 	sqlDB.SetMaxOpenConns(cfg.MaxOpenConns)
 	sqlDB.SetMaxIdleConns(cfg.MaxOpenConns)
 	sqlDB.SetConnMaxLifetime(time.Hour)
-	defer sqlDB.Close()
 
 	// 测试连接是否可用
 	if err := sqlDB.Ping(); err != nil {
+		defer sqlDB.Close()
 		return nil, fmt.Errorf("ping database: %w", err)
 	}
 
@@ -93,7 +93,7 @@ func (db *DB) Login(username, password string) (LoginResult, error) {
 	return LoginSuccess, nil
 }
 
-// Register inserts a new user. Returns an error if the username already exists.
+// Register 注册新用户，用户名已存在会返回错误
 func (db *DB) Register(username, password string) error {
 	if db == nil {
 		return fmt.Errorf("database not available")

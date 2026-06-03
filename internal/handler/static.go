@@ -7,7 +7,6 @@ import (
 	"strings"
 )
 
-// pathMap defines short-path → html file mappings, matching C++ DEFAULT_HTML_TAG.
 var pathMap = map[string]string{
 	"/":         "/index.html",
 	"/login":    "/login.html",
@@ -17,20 +16,20 @@ var pathMap = map[string]string{
 	"/picture":  "/picture.html",
 }
 
-// Static creates a handler that serves files from root, with short-path expansion.
-// Static asset paths (/css/, /js/, /images/, /fonts/) are served directly.
+// Static 创建一个处理器，用于提供静态文件服务
+// root 是静态文件根目录（如 ./resources）
 func Static(root string) http.HandlerFunc {
 	fs := http.Dir(root)
 
 	return func(w http.ResponseWriter, r *http.Request) {
 		path := r.URL.Path
 
-		// Check short-path mapping
+		// 如果路径在map中，替换为html路径
 		if mapped, ok := pathMap[path]; ok {
 			r.URL.Path = mapped
 		}
 
-		// Try to open the file
+		// 尝试打开静态资源
 		f, err := fs.Open(r.URL.Path)
 		if err != nil {
 			if os.IsNotExist(err) {
@@ -42,28 +41,29 @@ func Static(root string) http.HandlerFunc {
 		}
 		defer f.Close()
 
-		// Check if it's a directory
+		// 查看是否是目录
 		stat, err := f.Stat()
 		if err != nil {
 			http.Error(w, "500 Internal Server Error", http.StatusInternalServerError)
 			return
 		}
+		// 禁止访问目录
 		if stat.IsDir() {
 			http.Error(w, "403 Forbidden", http.StatusForbidden)
 			return
 		}
 
-		// Set Content-Type based on extension
+		// 根据文件后缀设置 Content-Type（告诉浏览器怎么解析文件）
+		// Ext(./login.html) 拿到文件后缀名 .html
 		ext := filepath.Ext(r.URL.Path)
 		if ct := mimeType(ext); ct != "" {
 			w.Header().Set("Content-Type", ct)
 		}
-
+		// 发送静态文件给浏览器
 		http.ServeContent(w, r, stat.Name(), stat.ModTime(), f)
 	}
 }
 
-// mimeType maps file extensions to Content-Type, matching the C++ SUFFIX_TYPE map.
 func mimeType(ext string) string {
 	switch strings.ToLower(ext) {
 	case ".html":

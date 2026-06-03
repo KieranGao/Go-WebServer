@@ -13,16 +13,16 @@ import (
 	"go-webserver/internal/middleware"
 )
 
-// Server holds all dependencies and the HTTP server.
+// Server 持有所有依赖和 HTTP 服务器实例
 type Server struct {
 	cfg  *config.Config
 	db   *db.DB
 	http *http.Server
 }
 
-// New creates a Server from config, initializes DB, wires routes and middleware.
+// New 根据配置创建服务器，初始化数据库，注册路由和中间件
 func New(cfg *config.Config) (*Server, error) {
-	// Initialize database (optional — server runs without it if connection fails)
+	// 初始化数据库
 	dbConn, err := db.Open(db.Config{
 		Host:         cfg.DBHost,
 		Port:         cfg.DBPort,
@@ -41,11 +41,11 @@ func New(cfg *config.Config) (*Server, error) {
 		db:  dbConn,
 	}
 
-	// Build routes
+	// 注册路由
 	mux := http.NewServeMux()
 	s.registerRoutes(mux)
 
-	// Apply middleware chain: recovery → logging → timeout → handler
+	// 应用中间件链：recovery → logging → timeout → handler
 	var root http.Handler = mux
 	root = middleware.Timeout(time.Duration(cfg.ConnectionTimeout) * time.Second)(root)
 	root = middleware.Log(root)
@@ -62,7 +62,7 @@ func New(cfg *config.Config) (*Server, error) {
 	return s, nil
 }
 
-// methodRoute dispatches GET to the static handler and POST to the auth handler.
+// methodRoute 根据请求方法分发：GET 走静态文件处理器，POST 走认证处理器
 func methodRoute(getHandler, postHandler http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodPost {
@@ -73,27 +73,27 @@ func methodRoute(getHandler, postHandler http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-// registerRoutes sets up all HTTP routes.
+// registerRoutes 注册所有 HTTP 路由
 func (s *Server) registerRoutes(mux *http.ServeMux) {
 	auth := &handler.Auth{DB: s.db}
 	staticH := handler.Static(s.cfg.ResourceRoot)
 
 	mux.HandleFunc("/health", handler.Health())
 
-	// /login and /register: GET serves the HTML form, POST handles auth
+	// /login 和 /register：GET 返回 HTML 页面，POST 处理认证逻辑
 	mux.HandleFunc("/login", methodRoute(staticH, auth.Login()))
 	mux.HandleFunc("/register", methodRoute(staticH, auth.Register()))
 
-	// Static files — catch-all for everything else
+	// 静态文件 — 兜底路由
 	mux.HandleFunc("/", staticH)
 }
 
-// Run starts the server and blocks until a shutdown signal is received.
+// Run 启动服务器，阻塞直到收到关闭信号
 func (s *Server) Run() error {
-	// Channel to receive errors from the server
+	// 用于接收服务器错误的通道
 	errCh := make(chan error, 1)
 
-	// Start server in a goroutine
+	// 在 goroutine 中启动服务器
 	go func() {
 		slog.Info("HTTP server listening", "addr", s.http.Addr)
 		if err := s.http.ListenAndServe(); err != nil && err != http.ErrServerClosed {
@@ -102,11 +102,11 @@ func (s *Server) Run() error {
 		close(errCh)
 	}()
 
-	// Wait for shutdown signal (platform-specific)
+	// 等待关闭信号（平台相关）
 	sig := waitForShutdownSignal()
 	slog.Info("shutdown signal received", "signal", sig)
 
-	// Graceful shutdown with timeout
+	// 优雅关闭，带超时
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
@@ -118,7 +118,7 @@ func (s *Server) Run() error {
 	return <-errCh
 }
 
-// Close releases all resources.
+// Close 释放所有资源
 func (s *Server) Close() {
 	if s.db != nil {
 		s.db.Close()

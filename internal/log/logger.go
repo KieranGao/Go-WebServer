@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-// Level maps config log_level (0-3) to slog levels.
+// Level 将配置中的 log_level (0-3) 映射为 slog 日志级别
 func Level(n int) slog.Leveler {
 	switch n {
 	case 0:
@@ -27,8 +27,8 @@ func Level(n int) slog.Leveler {
 	}
 }
 
-// asyncHandler is a slog.Handler that buffers log records and flushes
-// them to a file periodically, mimicking the C++ BlockDeque + worker thread design.
+// asyncHandler 实现 slog.Handler 接口，缓冲日志记录并定期刷盘
+// 模仿 C++ BlockDeque + worker 线程的设计
 type asyncHandler struct {
 	level   slog.Leveler
 	file    *os.File
@@ -36,13 +36,13 @@ type asyncHandler struct {
 	done    chan struct{}
 	mu      sync.Mutex
 	buf     strings.Builder
-	flushMs int64 // flush interval in milliseconds
+	flushMs int64 // 刷盘间隔，单位：毫秒
 }
 
-// New creates an async file-based logger.
-// Returns the slog.Logger and a shutdown function.
+// New 创建异步文件日志记录器
+// 返回 slog.Logger 和关闭函数
 func New(logFile string, level slog.Leveler, queueSize, flushInterval int) (*slog.Logger, func(), error) {
-	// Ensure log directory exists
+	// 确保日志目录存在
 	if err := os.MkdirAll(filepath.Dir(logFile), 0755); err != nil {
 		return nil, nil, fmt.Errorf("create log dir: %w", err)
 	}
@@ -60,7 +60,7 @@ func New(logFile string, level slog.Leveler, queueSize, flushInterval int) (*slo
 		flushMs: int64(flushInterval) * 1000,
 	}
 
-	// Worker goroutine: reads from channel, buffers, flushes periodically
+	// 工作 goroutine：从 channel 读取，缓冲，定期刷盘
 	go h.worker()
 
 	logger := slog.New(h)
@@ -73,12 +73,12 @@ func New(logFile string, level slog.Leveler, queueSize, flushInterval int) (*slo
 	return logger, shutdown, nil
 }
 
-// Enabled implements slog.Handler.
+// Enabled 实现 slog.Handler 接口
 func (h *asyncHandler) Enabled(_ context.Context, level slog.Level) bool {
 	return level >= h.level.Level()
 }
 
-// Handle implements slog.Handler. Formats the record and sends to channel.
+// Handle 实现 slog.Handler 接口，格式化日志记录并发送到 channel
 func (h *asyncHandler) Handle(_ context.Context, r slog.Record) error {
 	ts := r.Time.Format("2006-01-02 15:04:05.000")
 	levelStr := levelToString(r.Level)
@@ -99,26 +99,22 @@ func (h *asyncHandler) Handle(_ context.Context, r slog.Record) error {
 	})
 	sb.WriteString("\n")
 
-	// Non-blocking send; drop if queue is full (same as C++ fallback to stdout)
-	select {
-	case h.ch <- sb.String():
-	default:
-		fmt.Fprint(os.Stdout, sb.String())
-	}
+	// 发送到 channel
+	h.ch <- sb.String()
 	return nil
 }
 
-// WithAttrs implements slog.Handler.
+// WithAttrs 实现 slog.Handler 接口
 func (h *asyncHandler) WithAttrs(attrs []slog.Attr) slog.Handler {
-	return h // simplified: attrs handled per-record
+	return h // 简化实现：属性在每条记录中处理
 }
 
-// WithGroup implements slog.Handler.
+// WithGroup 实现 slog.Handler 接口
 func (h *asyncHandler) WithGroup(name string) slog.Handler {
 	return h
 }
 
-// worker reads formatted strings from ch, buffers them, and flushes periodically.
+// worker 从 channel 读取格式化字符串，缓冲后定期刷盘
 func (h *asyncHandler) worker() {
 	defer close(h.done)
 
@@ -129,7 +125,7 @@ func (h *asyncHandler) worker() {
 		select {
 		case msg, ok := <-h.ch:
 			if !ok {
-				// Channel closed — flush remaining and exit
+				// channel 已关闭 — 刷盘剩余内容后退出
 				h.flush()
 				return
 			}
@@ -147,24 +143,19 @@ func (h *asyncHandler) worker() {
 	}
 }
 
-// flush writes buffered content to the file.
+// flush 将缓冲内容写入文件
 func (h *asyncHandler) flush() {
 	h.mu.Lock()
-	if h.buf.Len() == 0 {
+	if h.buf.Len() == 0 { // buffer中没有日志
 		h.mu.Unlock()
 		return
 	}
 	data := h.buf.String()
-	h.buf.Reset()
+	h.buf.Reset() // 清空buffer
 	h.mu.Unlock()
 
 	h.file.WriteString(data)
-	h.file.Sync()
-}
-
-// StdoutLogger returns a logger that writes to stdout (for when logging to file is disabled).
-func StdoutLogger(level slog.Leveler) *slog.Logger {
-	return slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: level}))
+	h.file.Sync() // 强制落盘
 }
 
 func levelToString(level slog.Level) string {
@@ -178,47 +169,4 @@ func levelToString(level slog.Level) string {
 	default:
 		return "ERROR"
 	}
-}
-
-// MultiHandler fans out log records to multiple handlers.
-type MultiHandler struct {
-	handlers []slog.Handler
-}
-
-func NewMultiHandler(handlers ...slog.Handler) *MultiHandler {
-	return &MultiHandler{handlers: handlers}
-}
-
-func (m *MultiHandler) Enabled(ctx context.Context, level slog.Level) bool {
-	for _, h := range m.handlers {
-		if h.Enabled(ctx, level) {
-			return true
-		}
-	}
-	return false
-}
-
-func (m *MultiHandler) Handle(ctx context.Context, r slog.Record) error {
-	for _, h := range m.handlers {
-		if h.Enabled(ctx, r.Level) {
-			h.Handle(ctx, r)
-		}
-	}
-	return nil
-}
-
-func (m *MultiHandler) WithAttrs(attrs []slog.Attr) slog.Handler {
-	hs := make([]slog.Handler, len(m.handlers))
-	for i, h := range m.handlers {
-		hs[i] = h.WithAttrs(attrs)
-	}
-	return NewMultiHandler(hs...)
-}
-
-func (m *MultiHandler) WithGroup(name string) slog.Handler {
-	hs := make([]slog.Handler, len(m.handlers))
-	for i, h := range m.handlers {
-		hs[i] = h.WithGroup(name)
-	}
-	return NewMultiHandler(hs...)
 }

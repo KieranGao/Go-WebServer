@@ -7,7 +7,7 @@ import (
 	"os/signal"
 )
 
-// waitForShutdownSignal blocks until SIGINT (Ctrl+C) is received.
+// waitForShutdownSignal 阻塞直到收到 SIGINT（Ctrl+C）信号
 func waitForShutdownSignal() os.Signal {
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt)
